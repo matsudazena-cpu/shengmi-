@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>周深：给生米“小木马”的陪伴</title>
+    
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23E0BBE4%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2260%22 fill=%22white%22>A</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23E0BBE4%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2260%22 fill=%22white%22>A</text></svg>">
+
+    <style>
+        :root {
+            --bg-color: #AFC2DB;
+            --text-color: #0020A5;
+            --btn-color: #BCD4E7;
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            transition: background-color 0.5s ease;
+        }
+
+        /* 💙 互动区 */
+        #heart-btn {
+            font-size: 80px;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.2s;
+            margin-bottom: 20px;
+        }
+
+        #heart-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* 文字显示区 */
+        #content-box {
+            width: 85%;
+            min-height: 150px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .lyric-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .lyric-from {
+            font-size: 0.9rem;
+            text-align: right;
+            display: block;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+
+        /* 按钮样式 */
+        .btn-row {
+            margin-top: 30px;
+            display: flex;
+            gap: 20px;
+        }
+
+        button {
+            background-color: var(--btn-color);
+            color: var(--text-color);
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        button:active {
+            background-color: #a1bad1;
+        }
+
+        .support-btn {
+            margin-top: 50px;
+            background: transparent;
+            border: 1px solid var(--text-color);
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        /* 应援黑屏层 */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .slogan {
+            color: var(--text-color);
+            font-size: 1.4rem;
+            line-height: 2.5;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="heart-btn" onclick="getRandomLyric()">💙</div>
+
+    <div id="content-box">
+        <div id="display-text">
+            <span class="lyric-text">点击蓝心，听听深深的歌词</span>
+        </div>
+    </div>
+
+    <div class="btn-row">
+        <button onclick="getComfort('929')">929</button>
+        <button onclick="getComfort('🌸')">🌸</button>
+    </div>
+
+    <button class="support-btn" onclick="showSupport()">应援</button>
+
+    <div id="overlay" onclick="hideSupport()">
+        <div class="slogan">
+            卡布所在，音之天籁。<br>
+            风雨同周，深情不移。
+        </div>
+    </div>
+
+    <script>
+        const lyrics = [
+            { text: "你愿相信什么，就把世界看成什么样。偶尔难题加点重量，越要轻轻地旋转。", from: "——《小美满》" },
+            { text: "长吧，像树一样，触碰天堂，勇敢地，坚定地，拥抱世界的晴朗。", from: "——《芽》" },
+            { text: "永远轻盈，永远滚烫，不愿下沉，不肯下降。", from: "———《亲爱的旅人啊》" },
+            { text: "和光同行，跌跌撞撞的摸索；和光同舞，奋不顾身的坎坷。", from: "———《和光同尘》" },
+            { text: "做生活困兽，不如去浪漫宇宙。", from: "———《我以渺小爱你》" },
+            { text: "既有自己做情人，何必劳心费力爱世人", from: "———《不群》" },
+            { text: "好好生活，原来就是美好生活。", from: "———《好好生活就是美好生活》" },
+            { text: "每一个平凡的日子，因为你而有了意义。", from: "———《微光》" },
+            { text: "你是人间最美的相遇，也是时光里不凋谢的花。", from: "———《一路生花》" },
+            { text: "愿你此生辽阔，也愿你此生无忧。", from: "———《大鱼》" }
+        ];
+
+        let lastIndex = -1;
+
+        function getRandomLyric() {
+            let currentIndex;
+            do {
+                currentIndex = Math.floor(Math.random() * lyrics.length);
+            } while (currentIndex === lastIndex);
+            
+            lastIndex = currentIndex;
+            const item = lyrics[currentIndex];
+            
+            document.getElementById('display-text').innerHTML = `
+                <span class="lyric-text">${item.text}</span>
+                <span class="lyric-from">${item.from}</span>
+            `;
+        }
+
+        function getComfort(type) {
+            const display = document.getElementById('display-text');
+            if(type === '929') {
+                display.innerHTML = `<span class="lyric-text">抓一颗流星，祝福你要幸福。</span>`;
+            } else {
+                display.innerHTML = `<span class="lyric-text">花开忘忧，愿你无忧。</span>`;
+            }
+        }
+
+        function showSupport() {
+            document.getElementById('overlay').style.display = 'flex';
+        }
+
+        function hideSupport() {
+            document.getElementById('overlay').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
